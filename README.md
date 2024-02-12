@@ -1,2 +1,2 @@
-# SparkleBeat-Streaming-Code
-Opensource streamning code for SparkleBeat
+# SparkleBeat Streaming Code
+Opensource streaming code for SparkleBeat
