@@ -1,7 +1,7 @@
 import threading
 
-from playlist import Playlist
-from stream import Stream
+from Streaming.playlist import Playlist
+from Streaming.stream import Stream
 
 from dotenv import load_dotenv
 import os

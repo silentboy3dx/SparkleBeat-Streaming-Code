@@ -1,7 +1,7 @@
 <h1 align="center"> SparkleBeat Streaming Code</h1>
 
 <p align="center">
-    <img src="sparklebeat.png" width="250"  height="250" alt="Alt Text" />
+    <img src="assets/sparklebeat.png" width="250"  height="250" alt="Alt Text" />
 </p>
 
 
