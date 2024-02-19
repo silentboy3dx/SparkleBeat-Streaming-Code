@@ -46,8 +46,8 @@ pip install -r requirements.txt
 ## Usage
 
 ```python
-from Streaming.playlist import Playlist
-from Streaming.stream import Stream
+from streaming.playlist import Playlist
+from streaming.stream import Stream
 from dotenv import load_dotenv
 import threading
 import os
