@@ -21,7 +21,7 @@ stream = Stream(
 )
 
 @stream.nextsong()
-def newsong(song):
+def on_newsong(song):
     print('Playing', song.get_song_name())
     
 playlist = Playlist()

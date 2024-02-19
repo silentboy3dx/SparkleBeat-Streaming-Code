@@ -1,7 +1,13 @@
 <h1 align="center"> DJ SparkleBeat Streaming Code</h1>
 
 <p align="center">
-    <img src="assets/sparklebeat.png" width="250"  height="250" alt="Alt Text" />
+    <img src="assets/sparklebeat.png" width="250"  height="250" alt="Picture of DJ SparkleBeat" />
+</p>
+<p align="center">
+<a href="https://github.com/silentboy3dx/SparkleBeat-Streaming-Code" title="Go to GitHub repo"><img src="https://img.shields.io/static/v1?label=silentboy3dx&message=SparkleBeat-Streaming-Code&color=blue&logo=github" alt="silentboy3dx - SparkleBeat-Streaming-Code"></a>
+<a href="https://github.com/silentboy3dx/SparkleBeat-Streaming-Code"><img src="https://img.shields.io/github/stars/silentboy3dx/SparkleBeat-Streaming-Code?style=social" alt="stars - SparkleBeat-Streaming-Code"></a>
+<a href="https://github.com/silentboy3dx/SparkleBeat-Streaming-Code"><img src="https://img.shields.io/github/forks/silentboy3dx/SparkleBeat-Streaming-Code?style=social" alt="forks - SparkleBeat-Streaming-Code"></a>
+
 </p>
 
 
@@ -29,7 +35,8 @@ pip install -r requirements.txt
 
 
 1. Clone this repository to your local machine.
-2. Navigate to the streaming_code directory.
+2. Navigate to the created directory.
+3. copy .env-example and fill all required information.
 3. pip install -r requirements.txt
 4. Make sure you have some music on the music director
 5. Copy .env.example to .env and make sure you configure it to your needs.
