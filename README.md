@@ -1,4 +1,4 @@
-<h1 align="center"> SparkleBeat Streaming Code</h1>
+<h1 align="center"> DJ SparkleBeat Streaming Code</h1>
 
 <p align="center">
     <img src="assets/sparklebeat.png" width="250"  height="250" alt="Alt Text" />
