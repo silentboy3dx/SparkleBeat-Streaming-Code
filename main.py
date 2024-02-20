@@ -1,4 +1,5 @@
 from streaming.playlist import Playlist
+from streaming.song import Song
 from streaming.stream import Stream
 from dotenv import load_dotenv
 import threading
@@ -18,15 +19,46 @@ stream = Stream(
     stream_password=os.getenv("STREAM_PASSWORD"),
 )
 
-
-@stream.nextsong()
-def on_new_song(song):
-    print("Playing", song.get_song_name())
-
-
 playlist = Playlist()
 jingles = Playlist()
 advertisements = Playlist()
+requested_songs = []
+remove_requests = True
+
+
+@stream.nextsong()
+def on_new_song(song: Song) -> None:
+    """
+    This function is called when a new song is starting.
+    SparkleBeat uses this to send out notification of a new song to the game chat.
+    """
+    print("Playing", song.get_song_name())
+
+
+@playlist.forced_song_ended()
+def on_forced_song_ended(song: Song) -> None:
+    """
+    Callback from when a forced song has ended.
+    SparkleBeat uses this ether queue up a next request.
+    """
+
+    print("Forced song ended:", song.get_song_name())
+
+    if song.get_filename() in requested_songs:
+        requested_songs.remove(song.get_filename())
+
+        if len(requested_songs):
+            file = requested_songs[0]
+            playlist.add_song_and_play_next(file, remove_after=remove_requests)
+
+
+def request_song(file: str, announce=False) -> None:
+    if announce is True:
+        requested_songs.append("music/announcement.mp3")
+
+    requested_songs.append(file)
+    playlist.add_song_and_play_next(file, remove_after=remove_requests)
+
 
 playlist.from_directory(os.getenv("STREAM_MUSIC_DIRECTORY"))
 jingles.from_directory(os.getenv("STREAM_JINGLE_DIRECTORY"))
@@ -41,6 +73,19 @@ bg_thread = threading.Thread(target=stream.start)
 bg_thread.daemon = True  # Set the thread as a daemon
 bg_thread.start()
 
-while True:
-    input("Press enter for new next song\n")
-    stream.next_song()
+"""
+This is an optional feature. You dont have to use 
+this and the playlist will just play the songs in order.
+
+After playing a requested song the normal playlist will
+resume.
+"""
+request_song("music/next.mp3")
+
+try:
+    while True:
+        pass
+
+except KeyboardInterrupt:
+    for song in playlist.get_all_songs():
+        print(song.get_song_name())

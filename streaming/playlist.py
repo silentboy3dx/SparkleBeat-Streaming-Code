@@ -1,3 +1,5 @@
+import os.path
+
 from .song import Song
 from glob import glob
 
@@ -17,12 +19,66 @@ class Playlist:
         self.songs_array = []
 
         self.current_index = 0
+        self.last_current_index = self.current_index
         self.loop_playlist = False
         self.is_currently_stopped = True
         self.is_currently_playing = True
         self.loop = False
+        self.forced_next_song = None
+        self.remove_forced_song = False
+        self.start_playing_at = 0
+
+        self.callbacks = {
+            "forced_song_ended": []
+        }
 
         self.stop_playing()
+
+    def forced_song_ended(self):
+        """
+        Method Name: forced_song_ended
+
+        Description:
+        This method is used to add a callback function to the "forced_song_ended" event.
+
+        Parameters:
+        - self: The instance of the class that invokes this method.
+
+        Return Type:
+        function: The callback function added to the "forced_song_ended" event.
+
+        Example Usage:
+        class MyClass:
+            def __init__(self):
+                self.callbacks = {"forced_song_ended": []}
+
+            @forced_song_ended
+            def my_callback(self):
+                print("Song ended")
+
+        my_class = MyClass()
+        my_class.callbacks["forced_song_ended"][0]()  # Output: "Song ended"
+        """
+        def inner(f):
+            self.callbacks["forced_song_ended"].append(f)
+            return f
+
+        return inner
+
+    def advertise_forced_song_ended(self, song: Song) -> None:
+        """
+
+        This method advertises that a forced song has ended by calling all the registered callbacks for the "forced_song_ended" event.
+
+        Parameters:
+            - self: The current instance of the class.
+
+        Return Type:
+            - None
+
+        """
+        for callback in self.callbacks["forced_song_ended"]:
+            callback(song)
 
     def set_loop(self, value) -> None:
         """
@@ -70,7 +126,8 @@ class Playlist:
         self.files_array.sort()
 
         for file in self.files_array:
-            self.songs_array.append(Song(file))
+            if os.path.basename(file) != "next.mp3":
+                self.songs_array.append(Song(file))
 
     def get_all_songs(self) -> list[Song]:
         """
@@ -97,8 +154,8 @@ class Playlist:
         """
         return self.songs_array[self.current_index]
 
-    def start(self) -> None:
-        self.stop_current_song()
+    def start_playing_at_position(self, position: int) -> None:
+        self.start_playing_at = position
         self.start_playing()
 
     def start_playing(self) -> None:
@@ -115,14 +172,16 @@ class Playlist:
         """
         self.is_currently_playing = True
         self.is_currently_stopped = False
-        self.current_index = 0
+
+        self.current_index = self.start_playing_at
+        self.last_current_index = 0
 
     def stop_playing(self) -> None:
         """
         Stop playing.
 
         Resets the current index to 0, indicating the start of the playlist. Sets the 'is_currently_stopped' flag to True to indicate that the playback has stopped. Sets the 'is_currently_playing
-        *' flag to False to indicate that no song is currently being played.
+        *' flag too False to indicate that no song is currently being played.
 
         Returns:
             None
@@ -130,6 +189,32 @@ class Playlist:
         self.current_index = 0
         self.is_currently_stopped = True
         self.is_currently_playing = False
+
+    def restore_current_index(self) -> None:
+        """
+        Restores the current index of the songs array.
+
+        If a forced song was played, this method returns the current index of the songs array
+        to the position it was before the forced song was played. If the remove_forced_song flag
+        is True, the forced song will be removed from the songs array.
+
+        Returns:
+            None
+
+        Example:
+            player.restore_current_index()"""
+        if self.forced_next_song and self.forced_next_song == self.current_index:
+            """
+            We are returning to the next_song song function after playing a forced song.
+            """
+            song = self.get_current_song()
+            if self.remove_forced_song:
+                self.songs_array.remove(self.get_current_song())
+
+            self.forced_next_song = None
+            self.current_index = self.last_current_index
+
+            self.advertise_forced_song_ended(song)
 
     def previous_song(self) -> None:
         """
@@ -142,8 +227,10 @@ class Playlist:
             player = Player()
             player.previous_song()
         """
-        old_song = self.get_current_song()
+        self.restore_current_index()
+
         songs_length = len(self.songs_array) - 1
+        self.last_current_index = self.current_index
 
         if self.current_index - 1 < 0:
             if self.loop_playlist:
@@ -156,8 +243,10 @@ class Playlist:
         else:
             self.current_index -= 1
 
-        if old_song:
-            old_song.stop()
+        if self.forced_next_song and self.current_index != self.forced_next_song:
+            self.current_index = self.forced_next_song
+
+        self.play_current_song()
 
     def next_song(self) -> None:
         """
@@ -173,8 +262,10 @@ class Playlist:
         next_song()
 
         """
-        old_song = self.get_current_song()
+        self.restore_current_index()
+
         songs_length = len(self.songs_array) - 1
+        self.last_current_index = self.current_index
 
         if self.current_index + 1 > songs_length:
             if self.loop_playlist:
@@ -187,25 +278,29 @@ class Playlist:
         else:
             self.current_index += 1
 
-        if old_song:
-            old_song.stop()
+        if self.forced_next_song and self.current_index != self.forced_next_song:
+            self.last_current_index = self.last_current_index
+            self.current_index = self.forced_next_song
 
         self.play_current_song()
 
     def play_current_song(self) -> None:
         """
+        Method: play_current_song
 
         Plays the current song in the media player.
 
-        :param self: The current instance of the media player.
-        :type self: object
-
-        :return: None
-        :rtype: None
+        Return Type:
+        - None
 
         """
         song = self.get_current_song()
         song.play()
+
+    def add_song_and_play_next(self, file: str, remove_after=False) -> None:
+        self.songs_array.append(Song(file))
+        self.forced_next_song = len(self.songs_array) - 1
+        self.remove_forced_song = remove_after
 
     def pause_current_song(self) -> None:
         """

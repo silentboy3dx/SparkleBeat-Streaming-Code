@@ -3,61 +3,62 @@ import random
 from .song import Song
 from typing import Callable
 
+
 class Stream:
     """
-
-    Class: Stream
-
-    Represents an audio stream that can be played on a Shoutcast server.
+    This class represents a live audio streaming object. It allows you to start and stop playing a playlist of songs or audio files and dynamically switch between songs, jingles, and advertisements
+    *.
 
     Attributes:
-    - shout (shout.Shout): The Shout instance used for streaming.
-    - shout.audio_info (dict): Dictionary containing audio info (bitrate, samplerate, channels).
-    - shout.format (str): The format of the audio stream ('mp3' or 'ogg vorbis').
-    - shout.genre (str): The genre of the stream.
-    - ogv (int): Flag indicating whether the format is ogg vorbis (0 or 1).
-    - shout.host (str): The host of the stream.
-    - shout.port (int): The port of the stream.
-    - shout.password (str): The password for the stream.
-    - shout.mount (str): The mount point for the stream.
-    - shout.name (str): The name of the stream.
-    - shout.url (str): The URL of the stream.
-    - music_directory (str): The directory where the music is located.
-    - shout.description (str): The description of the stream.
-    - song_conter (int): The counter for the current song.
+    - shout: An instance of the shoutcast library used for streaming audio.
+    - shout.host: The host name or IP address of the shoutcast server.
+    - shout.port: The port number of the shoutcast server.
+    - shout.password: The password for accessing the shoutcast server.
+    - shout.mount: The mount point for streaming the audio.
+    - shout.name: The name of the streaming station.
+    - shout.url: The URL associated with the streaming station.
+    - shout.description: The description of the streaming station.
+    - current_playlist: The current playlist being played.
+    - current_jingles: The list of jingles for the current instance.
+    - current_advertisements: The list of advertisements for the current instance.
+    - current_song: The current song being played.
+    - jingle_or_advertisement_chance: The chance for playing a jingle or advertisement during a song.
+    - jingle_chance: The chance for playing a jingle instead of an advertisement.
+    - advertisement_chance: The chance for playing an advertisement instead of a jingle.
+    - force_next: A flag to force skipping to the next song.
 
     Methods:
-    - nextsong(self) -> Callable:
-      Registers a callback function to be executed when the next song is played.
+    - nextsong(callback: Callable) -> Callable:
+        Registers a callback function to be executed when the next song is played.
 
-    - advertise_new_song(self) -> None:
-      Advertises a new song by invoking the registered callbacks.
+    - advertise_new_song() -> None:
+        Advertises a new song by invoking the registered callbacks.
 
-    - set_playlist(self, playlist) -> None:
-      Set the current playlist.
+    - set_playlist(playlist: Any) -> None:
+        Sets the current playlist.
 
-    - set_advertisements(self, advertisements) -> None:
-      Sets the list of advertisements for the current instance.
+    - set_advertisements(advertisements: List) -> None:
+        Sets the list of advertisements for the current instance.
 
-    - set_jingles(self, jingles) -> None:
-      Set the jingles for the current object.
+    - set_jingles(jingles: List) -> None:
+        Sets the list of jingles for the current instance.
 
-    - get_current_song(self) -> Song:
-      Returns the current song.
+    - get_current_song() -> Song:
+        Returns the current song being played.
 
-    - next_song(self) -> None:
-      Sets the `force_next` flag to True.
+    - next_song() -> None:
+        Sets the 'force_next' flag to True.
 
-    - start(self) -> None:
-      Starts playing the audio stream.
+    - start() -> None:
+        Starts playing the audio stream.
 
-    - stop(self) -> None:
-      Stops the current playing playlist.
+    - stop() -> None:
+        Stops the current playing playlist.
 
-    - stream_audio(self, song: Song) -> None:
-      Streams audio from a given Song object to the Shoutcast server.
-
+    - stream_audio(song: Song) -> None:
+        Streams audio from a given Song object to the shoutcast server.
     """
+
     def __init__(
             self,
             mount_point,
@@ -78,21 +79,15 @@ class Stream:
         }
         self.shout.format = "mp3"  # using mp3 but it can also be ogg vorbis
         self.shout.genre = genre
-        self.ogv = 0
-
-        # self.config = get_config()
         self.shout.host = stream_host
         self.shout.port = int(stream_port)
         self.shout.password = stream_password
         self.shout.mount = mount_point
 
-        # self.logger = get_logger(name)
-
         self.shout.name = name
         self.shout.url = station_url
         self.music_directory = music_directory
         self.shout.description = description
-        self.song_conter = 0
 
         self.shout.open()
 
@@ -106,7 +101,7 @@ class Stream:
         self.force_next = False
 
         self.callbacks = {
-            "nextsong": [],
+            "nextsong": []
         }
 
     def nextsong(self) -> Callable:
@@ -116,6 +111,7 @@ class Stream:
         :param self: The instance of the object.
         :return: The decorated function.
         """
+
         def inner(f):
             self.callbacks["nextsong"].append(f)
             return f
@@ -128,6 +124,7 @@ class Stream:
 
         Parameters:
         - self: The current instance of the class.
+        - playlist: (Playlist) The song playlist
 
         Return Type:
         - None
@@ -145,7 +142,7 @@ class Stream:
         Set the current playlist.
 
         Parameters:
-        - playlist (any): The playlist to be set.
+        - playlist (Playlist): The playlist to be set.
 
         Returns:
         - None
@@ -158,9 +155,12 @@ class Stream:
         """
         Sets the list of advertisements for the current instance.
 
-        :param advertisements: The list of advertisements.
-        :type advertisements: list
-        :return: None
+        Parameters:
+        - playlist (Playlist): The advertisements playlist to be set.
+
+        Returns:
+        - None
+
         """
         self.current_advertisements = advertisements
 
@@ -168,9 +168,12 @@ class Stream:
         """
         Set the jingles for the current object.
 
-        :param jingles: A list of jingles to be set.
-        :type jingles: list
-        :return: None
+        Parameters:
+        - playlist (Playlist): The jingles playlist to be set.
+
+        Returns:
+        - None
+
         """
         self.current_jingles = jingles
 
