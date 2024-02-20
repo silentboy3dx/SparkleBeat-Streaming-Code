@@ -36,7 +36,7 @@ class Playlist:
 
     def forced_song_ended(self):
         """
-        Method Name: forced_song_ended
+        Method: forced_song_ended
 
         Description:
         This method is used to add a callback function to the "forced_song_ended" event.
@@ -67,6 +67,7 @@ class Playlist:
 
     def advertise_forced_song_ended(self, song: Song) -> None:
         """
+        Method: advertise_forced_song_ended
 
         This method advertises that a forced song has ended by calling all the registered callbacks for the
         "forced_song_ended" event.
@@ -83,6 +84,7 @@ class Playlist:
 
     def set_loop(self, value) -> None:
         """
+        Method: set_loop
 
         Set the loop option for the playlist.
 
@@ -97,6 +99,8 @@ class Playlist:
 
     def is_playing(self) -> bool:
         """
+        Method: is_playing
+
         Check if the object is currently playing.
 
         Returns:
@@ -106,6 +110,8 @@ class Playlist:
 
     def is_stopped(self) -> bool:
         """
+        Method: is_stopped
+
         Check if the object is currently stopped.
 
         Returns:
@@ -115,7 +121,8 @@ class Playlist:
         return self.is_currently_stopped
 
     def from_directory(self, directory) -> None:
-        """Loads songs from a directory.
+        """
+        Loads songs from a directory.
 
         The method from_directory takes a directory path as input parameter and loads songs from that directory into
         the songs_array.
@@ -140,10 +147,6 @@ class Playlist:
 
     def get_all_songs(self) -> list[Song]:
         """
-
-        Method Name: get_all_songs
-
-        Description:
         This method returns a list of all songs in the songs_array.
 
         Parameters:
@@ -164,12 +167,21 @@ class Playlist:
         return self.songs_array[self.current_index]
 
     def start_playing_at_position(self, position: int) -> None:
+        """
+        Start playing at the specified position.
+
+        :param position: The position at which the playing should start.
+        :type position: int
+
+        :returns: None
+        :rtype: None
+
+        """
         self.start_playing_at = position
         self.start_playing()
 
     def start_playing(self) -> None:
         """
-
         Starts playing the audio.
 
         This method sets the 'is_currently_playing' attribute of the object to True, indicating that the audio is
@@ -262,8 +274,6 @@ class Playlist:
 
     def next_song(self) -> None:
         """
-        Method: next_song
-
         Description: This method updates the current index of the playlist to select the next song. It also stops the
         currently playing song and starts playing the new current song.
 
@@ -298,8 +308,6 @@ class Playlist:
 
     def play_current_song(self) -> None:
         """
-        Method: play_current_song
-
         Plays the current song in the media player.
 
         Return Type:
@@ -311,7 +319,6 @@ class Playlist:
 
     def add_song_and_play_next(self, file: str, remove_after=False) -> None:
         """
-
         Add the given song file to the songs_array and play it next.
 
         :param file: (str) The file path/name of the song.
@@ -337,7 +344,8 @@ class Playlist:
         song.pause()
 
     def stop_current_song(self) -> None:
-        """Stop the current playing song.
+        """
+        Stop the current playing song.
 
         This method retrieves the current playing song and stops it.
 
