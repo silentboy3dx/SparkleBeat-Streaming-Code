@@ -338,7 +338,7 @@ class Playlist:
             self: The instance of the current object.
 
         Returns:
-        None
+            None
         """
         song = self.get_current_song()
         song.pause()
