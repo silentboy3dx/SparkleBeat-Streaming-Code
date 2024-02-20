@@ -6,8 +6,8 @@ from typing import Callable
 
 class Stream:
     """
-    This class represents a live audio streaming object. It allows you to start and stop playing a playlist of songs or audio files and dynamically switch between songs, jingles, and advertisements
-    *.
+    This class represents a live audio streaming object. It allows you to start and stop playing a playlist of songs
+    or audio files and dynamically switch between songs, jingles, and advertisements.
 
     Attributes:
     - shout: An instance of the shoutcast library used for streaming audio.
@@ -209,8 +209,10 @@ class Stream:
         - Advertises the new song (calls `advertise_new_song`)
         - Streams the audio of the current song
         - Determines if a jingle or advertisement should be played based on a random number generator
-        - If a jingle should be played and there is a current jingle available, it plays the jingle and moves to the next jingle
-        - If an advertisement should be played and there is a current advertisement available, it plays the advertisement and moves to the next advertisement
+        - If a jingle should be played and there is a current jingle available, it plays the jingle and moves to the
+          next jingle
+        - If an advertisement should be played and there is a current advertisement available, it plays the
+          advertisement and moves to the next advertisement
         - Moves to the next song in the playlist
 
         Parameters:
