@@ -141,7 +141,7 @@ class Playlist:
         This method returns a list of all songs in the songs_array.
 
         Parameters:
-        - self (object): The instance of the class.
+        - self (Playlist): The instance of the class.
 
         Returns:
         - list[Song]: A list containing all the songs in the songs_array.
@@ -165,7 +165,7 @@ class Playlist:
         :type position: int
 
         Parameters:
-            self (object): The current instance of the class.
+            self (Playlist): The current instance of the class.
             position (int): The position at which the playing should start
 
         Return Type:
@@ -317,7 +317,7 @@ class Playlist:
         Add the given song file to the songs_array and play it next.
 
         Parameters:
-            self (object: The instance of the current object.
+            self (Playlist: The instance of the current object.
             file (string): The file to add.
             remove_after (bool, optional): if set to True the forced song will be removed after playing.
 
