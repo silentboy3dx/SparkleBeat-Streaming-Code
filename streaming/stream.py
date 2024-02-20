@@ -227,7 +227,7 @@ class Stream:
             self.current_playlist.start_playing()
 
             while self.current_playlist.is_playing():
-                self.current_song = self.current_playlist.get_current_song();
+                self.current_song = self.current_playlist.get_current_song()
                 self.advertise_new_song()
                 self.stream_audio(self.current_playlist.get_current_song())
 
@@ -238,13 +238,13 @@ class Stream:
 
                     matched = False
                     if self.current_jingles and self.jingle_chance <= delta:
-                        self.current_song = self.current_jingles.get_current_song();
+                        self.current_song = self.current_jingles.get_current_song()
                         self.stream_audio(self.current_jingles.get_current_song())
                         self.current_jingles.next_song()
                         matched = True
 
                     if self.current_advertisements and self.advertisement_chance <= delta and matched is False:
-                        self.current_song = self.current_advertisements.get_current_song();
+                        self.current_song = self.current_advertisements.get_current_song()
                         self.stream_audio(self.current_advertisements.get_current_song())
                         self.current_advertisements.next_song()
 

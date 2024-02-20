@@ -24,7 +24,8 @@ class Song:
         Start playing the audio.
 
         This method sets the `is_playing` flag to True, indicating that the audio is currently being played.
-        It also sets the `is_paused` and `is_stopped` flags to False to indicate that the audio is not paused or stopped.
+        It also sets the `is_paused` and `is_stopped` flags too False to indicate that the audio is not paused or
+        stopped.
 
         :return: None
         """

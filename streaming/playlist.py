@@ -68,7 +68,8 @@ class Playlist:
     def advertise_forced_song_ended(self, song: Song) -> None:
         """
 
-        This method advertises that a forced song has ended by calling all the registered callbacks for the "forced_song_ended" event.
+        This method advertises that a forced song has ended by calling all the registered callbacks for the
+        "forced_song_ended" event.
 
         Parameters:
             - self: The current instance of the class.
@@ -109,7 +110,8 @@ class Playlist:
     def from_directory(self, directory) -> None:
         """Loads songs from a directory.
 
-        The method from_directory takes a directory path as input parameter and loads songs from that directory into the songs_array.
+        The method from_directory takes a directory path as input parameter and loads songs from that directory into
+        the songs_array.
 
         Parameters:
         - directory (str): The path of the directory containing the songs to load.
@@ -163,8 +165,10 @@ class Playlist:
 
         Starts playing the audio.
 
-        This method sets the 'is_currently_playing' attribute of the object to True, indicating that the audio is currently being played. It also sets the 'is_currently_stopped' attribute to
-        * False, indicating that the audio is not stopped. Finally, it sets the 'current_index' attribute to 0, indicating that the audio playback is starting from the beginning.
+        This method sets the 'is_currently_playing' attribute of the object to True, indicating that the audio is
+        currently being played. It also sets the 'is_currently_stopped' attribute to * False, indicating that the
+        audio is not stopped. Finally, it sets the 'current_index' attribute to 0, indicating that the audio playback
+        is starting from the beginning.
 
         Returns:
             None
@@ -180,8 +184,9 @@ class Playlist:
         """
         Stop playing.
 
-        Resets the current index to 0, indicating the start of the playlist. Sets the 'is_currently_stopped' flag to True to indicate that the playback has stopped. Sets the 'is_currently_playing
-        *' flag too False to indicate that no song is currently being played.
+        Resets the current index to 0, indicating the start of the playlist. Sets the 'is_currently_stopped' flag to
+        True to indicate that the playback has stopped. Sets the 'is_currently_playing *' flag too False to indicate
+        that no song is currently being played.
 
         Returns:
             None
@@ -252,8 +257,8 @@ class Playlist:
         """
         Method: next_song
 
-        Description:
-        This method updates the current index of the playlist to select the next song. It also stops the currently playing song and starts playing the new current song.
+        Description: This method updates the current index of the playlist to select the next song. It also stops the
+        currently playing song and starts playing the new current song.
 
         Return Type:
         - None
@@ -298,6 +303,15 @@ class Playlist:
         song.play()
 
     def add_song_and_play_next(self, file: str, remove_after=False) -> None:
+        """
+
+        Add the given song file to the songs_array and play it next.
+
+        :param file: (str) The file path/name of the song.
+        :param remove_after: (bool) Optional. Whether to remove the song from the playlist after playing.
+        :return: None
+
+        """
         self.songs_array.append(Song(file))
         self.forced_next_song = len(self.songs_array) - 1
         self.remove_forced_song = remove_after
