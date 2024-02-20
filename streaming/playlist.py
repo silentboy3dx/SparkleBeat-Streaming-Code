@@ -105,6 +105,13 @@ class Playlist:
         return self.is_currently_playing
 
     def is_stopped(self) -> bool:
+        """
+        Check if the object is currently stopped.
+
+        Returns:
+            bool: True if the object is currently stopped,
+                  False otherwise.
+        """
         return self.is_currently_stopped
 
     def from_directory(self, directory) -> None:
