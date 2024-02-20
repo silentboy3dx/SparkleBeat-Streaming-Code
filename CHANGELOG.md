@@ -1,3 +1,7 @@
+# v0.0.11
+
+* Removed some files that made it into release v0.0.10
+
 # v0.0.10
 
 * Added an example configuration file
