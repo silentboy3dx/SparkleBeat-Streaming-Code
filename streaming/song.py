@@ -27,7 +27,9 @@ class Song:
         It also sets the `is_paused` and `is_stopped` flags too False to indicate that the audio is not paused or
         stopped.
 
-        :return: None
+        Returns:
+            None
+            
         """
         self.is_playing = True
         self.is_paused = False
@@ -35,7 +37,6 @@ class Song:
     
     def pause(self) -> None:
         """
-
         This method pauses the playback of the audio.
 
         Parameters:

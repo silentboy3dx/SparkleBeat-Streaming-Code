@@ -36,16 +36,13 @@ class Playlist:
 
     def forced_song_ended(self):
         """
-        Method: forced_song_ended
-
-        Description:
         This method is used to add a callback function to the "forced_song_ended" event.
 
         Parameters:
-        - self: The instance of the class that invokes this method.
+            self: The instance of the class that invokes this method.
 
         Return Type:
-        function: The callback function added to the "forced_song_ended" event.
+            function: The callback function added to the "forced_song_ended" event.
 
         Example Usage:
         class MyClass:
@@ -67,8 +64,6 @@ class Playlist:
 
     def advertise_forced_song_ended(self, song: Song) -> None:
         """
-        Method: advertise_forced_song_ended
-
         This method advertises that a forced song has ended by calling all the registered callbacks for the
         "forced_song_ended" event.
 
@@ -84,8 +79,6 @@ class Playlist:
 
     def set_loop(self, value) -> None:
         """
-        Method: set_loop
-
         Set the loop option for the playlist.
 
         Parameters:
@@ -99,8 +92,6 @@ class Playlist:
 
     def is_playing(self) -> bool:
         """
-        Method: is_playing
-
         Check if the object is currently playing.
 
         Returns:
@@ -128,10 +119,10 @@ class Playlist:
         the songs_array.
 
         Parameters:
-        - directory (str): The path of the directory containing the songs to load.
+            directory (str): The path of the directory containing the songs to load.
 
         Return Type:
-        None
+            None
 
         Example Usage:
         ```
@@ -173,8 +164,12 @@ class Playlist:
         :param position: The position at which the playing should start.
         :type position: int
 
-        :returns: None
-        :rtype: None
+        Parameters:
+            self (object): The current instance of the class.
+            position (int): The position at which the playing should start
+
+        Return Type:
+            None
 
         """
         self.start_playing_at = position
@@ -274,14 +269,14 @@ class Playlist:
 
     def next_song(self) -> None:
         """
-        Description: This method updates the current index of the playlist to select the next song. It also stops the
+        This method updates the current index of the playlist to select the next song. It also stops the
         currently playing song and starts playing the new current song.
 
         Return Type:
-        - None
+            None
 
         Example Usage:
-        next_song()
+            next_song()
 
         """
         self.restore_current_index()
@@ -311,7 +306,7 @@ class Playlist:
         Plays the current song in the media player.
 
         Return Type:
-        - None
+            None
 
         """
         song = self.get_current_song()
@@ -321,9 +316,13 @@ class Playlist:
         """
         Add the given song file to the songs_array and play it next.
 
-        :param file: (str) The file path/name of the song.
-        :param remove_after: (bool) Optional. Whether to remove the song from the playlist after playing.
-        :return: None
+        Parameters:
+            self (object: The instance of the current object.
+            file (string): The file to add.
+            remove_after (bool, optional): if set to True the forced song will be removed after playing.
+
+        Returns:
+            None
 
         """
         self.songs_array.append(Song(file))

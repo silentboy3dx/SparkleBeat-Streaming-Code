@@ -108,8 +108,12 @@ class Stream:
         """
         Registers a callback function to be executed when the next song is played.
 
-        :param self: The instance of the object.
-        :return: The decorated function.
+        Parameters:
+            self: The current instance of the class.
+
+        Return Type:
+            None
+
         """
 
         def inner(f):
@@ -123,11 +127,10 @@ class Stream:
         Advertises a new song by invoking the registered callbacks.
 
         Parameters:
-        - self: The current instance of the class.
-        - playlist: (Playlist) The song playlist
+            self: The current instance of the class.
 
         Return Type:
-        - None
+            None
 
         Example Usage:
         advertise_new_song(self)
@@ -138,14 +141,13 @@ class Stream:
 
     def set_playlist(self, playlist) -> None:
         """
-
         Set the current playlist.
 
         Parameters:
-        - playlist (Playlist): The playlist to be set.
+            playlist (Playlist): The playlist to be set.
 
         Returns:
-        - None
+            None
 
         """
         self.stop()
@@ -156,10 +158,10 @@ class Stream:
         Sets the list of advertisements for the current instance.
 
         Parameters:
-        - playlist (Playlist): The advertisements playlist to be set.
+            advertisements (Playlist): The advertisements playlist to be set.
 
         Returns:
-        - None
+            None
 
         """
         self.current_advertisements = advertisements
@@ -169,10 +171,10 @@ class Stream:
         Set the jingles for the current object.
 
         Parameters:
-        - playlist (Playlist): The jingles playlist to be set.
+        - jingles (Playlist): The jingles playlist to be set.
 
         Returns:
-        - None
+            None
 
         """
         self.current_jingles = jingles
@@ -191,10 +193,11 @@ class Stream:
         Sets the `force_next` flag to True.
 
         Parameters:
-        - self: Reference to the current instance of the class.
+            self: Reference to the current instance of the class.
 
         Returns:
-        - None
+            None
+
         """
         self.force_next = True
 
@@ -215,11 +218,9 @@ class Stream:
           advertisement and moves to the next advertisement
         - Moves to the next song in the playlist
 
-        Parameters:
-        - None
-
         Returns:
-        - None
+            None
+
         """
         self.shout.close()
         self.shout.open()
@@ -257,10 +258,10 @@ class Stream:
         Stops the current playing playlist.
 
         Parameters:
-        - self: The instance of the class.
+            self: The instance of the class.
 
         Return Type:
-        - None
+            None
 
         Example Usage:
             obj = ClassName()
@@ -271,14 +272,13 @@ class Stream:
 
     def stream_audio(self, song: Song) -> None:
         """
-
         Streams audio from a given Song object to the shoutcast server.
 
         Parameters:
-        - `song` (Song): The Song object representing the audio to be streamed.
+            song` (Song): The Song object representing the audio to be streamed.
 
         Returns:
-        None
+            None
 
         """
         temp = open(song.get_filename(), "rb")
