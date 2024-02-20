@@ -335,7 +335,7 @@ class Playlist:
         Pause the current song.
 
         Parameters:
-        self: The instance of the current object.
+            self: The instance of the current object.
 
         Returns:
         None
