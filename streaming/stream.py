@@ -99,10 +99,17 @@ class Stream:
         self.jingle_chance = 20
         self.advertisement_chance = 10
         self.force_next = False
+        self.force_stop = False
 
         self.callbacks = {
             "nextsong": []
         }
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, tb):
+        pass
 
     def nextsong(self) -> Callable:
         """
@@ -234,6 +241,9 @@ class Stream:
                 self.advertise_new_song()
                 self.stream_audio(self.current_playlist.get_current_song())
 
+                if self.force_stop:
+                    return
+
                 rng = random.randrange(1, 100 - self.jingle_or_advertisement_chance, 1)
 
                 if rng >= self.jingle_or_advertisement_chance:
@@ -270,6 +280,8 @@ class Stream:
         if self.current_playlist:
             self.current_playlist.stop_playing()
 
+        self.force_stop = True
+
     def stream_audio(self, song: Song) -> None:
         """
         Streams audio from a given Song object to the shoutcast server.
@@ -284,10 +296,14 @@ class Stream:
         temp = open(song.get_filename(), "rb")
         self.shout.set_metadata({"song": song.get_song_name()})
         new_buffer = temp.read(4096)
-        while len(new_buffer) != 0 and self.force_next is False:
+        while len(new_buffer) != 0 and self.force_next is False and self.force_stop is False:
             buffer = new_buffer
             new_buffer = temp.read(4096)
             self.shout.send(buffer)
             self.shout.sync()
         temp.close()
+
+        if self.force_stop:
+            return
+
         self.force_next = False
