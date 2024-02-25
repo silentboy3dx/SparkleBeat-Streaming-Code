@@ -1,4 +1,4 @@
-# v0.0.13
+# v0.0.13 and v0.0.13.1
 * Fixed a bug that could crash the stream if there are no jingles.
 
 # v0.0.12
