@@ -89,7 +89,6 @@ class Stream:
         self.music_directory = music_directory
         self.shout.description = description
 
-        self.shout.open()
 
         self.current_playlist = None
         self.current_jingles = None
@@ -158,6 +157,7 @@ class Stream:
 
         """
         self.stop()
+        self.force_stop = False
         self.current_playlist = playlist
 
     def set_advertisements(self, advertisements) -> None:
@@ -229,7 +229,12 @@ class Stream:
             None
 
         """
-        self.shout.close()
+
+        try:
+            self.shout.close()
+        except Exception:
+            pass
+
         self.shout.open()
 
         if self.current_playlist:
@@ -242,6 +247,7 @@ class Stream:
                 self.stream_audio(self.current_playlist.get_current_song())
 
                 if self.force_stop:
+                    self.force_stop = False
                     return
 
                 rng = random.randrange(1, 100 - self.jingle_or_advertisement_chance, 1)
@@ -296,14 +302,15 @@ class Stream:
         temp = open(song.get_filename(), "rb")
         self.shout.set_metadata({"song": song.get_song_name()})
         new_buffer = temp.read(4096)
-        while len(new_buffer) != 0 and self.force_next is False and self.force_stop is False:
+        while len(new_buffer) != 0 and self.force_next is False:
+            if self.force_stop:
+                break
+
             buffer = new_buffer
             new_buffer = temp.read(4096)
             self.shout.send(buffer)
             self.shout.sync()
-        temp.close()
 
-        if self.force_stop:
-            return
+        temp.close()
 
         self.force_next = False
