@@ -256,14 +256,14 @@ class Stream:
                     delta = (100 - self.jingle_or_advertisement_chance)
 
                     matched = False
-                    if self.current_jingles and self.jingle_chance <= delta and len(self.current_jingles) > 0:
+                    if self.current_jingles and self.jingle_chance <= delta and len(self.current_jingles.get_all_songs()) > 0:
                         self.current_song = self.current_jingles.get_current_song()
                         self.stream_audio(self.current_jingles.get_current_song())
                         self.current_jingles.next_song()
                         matched = True
 
                     if (self.current_advertisements and self.advertisement_chance <= delta and matched is False
-                            and len(self.current_advertisements) > 0):
+                            and len(self.current_advertisements.get_all_songs()) > 0):
                         self.current_song = self.current_advertisements.get_current_song()
                         self.stream_audio(self.current_advertisements.get_current_song())
                         self.current_advertisements.next_song()
