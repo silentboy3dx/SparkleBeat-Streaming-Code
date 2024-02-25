@@ -1,4 +1,7 @@
 # v0.0.12
+* Updated the stop stream function as it had a small bug.
+
+# v0.0.11
 * Added an option to force stop streaming.
 * 
 # v0.0.11

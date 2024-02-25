@@ -37,10 +37,10 @@ pip install -r requirements.txt
 1. Clone this repository to your local machine.
 2. Navigate to the created directory.
 3. copy .env-example and fill all required information.
-3. pip install -r requirements.txt
-4. Make sure you have some music on the music director
-5. Copy .env.example to .env and make sure you configure it to your needs.
-6Run the main.py script to start the streaming service.
+4. pip install -r requirements.txt
+5. Make sure you have some music on the music director
+6. Copy .env.example to .env and make sure you configure it to your needs.
+7. Run the main.py script to start the streaming service.
 
 
 ## Usage
@@ -80,6 +80,7 @@ def on_new_song(song: Song) -> None:
     This function is called when a new song is starting.
     SparkleBeat uses this to send out notification of a new song to the game chat.
     """
+    
     print("Playing", song.get_song_name())
 
 
