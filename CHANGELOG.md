@@ -1,3 +1,6 @@
+# v0.0.13
+* Fixed a bug that could crash the stream if there are no jingles.
+
 # v0.0.12
 * Updated the stop stream function as it had a small bug.
 
