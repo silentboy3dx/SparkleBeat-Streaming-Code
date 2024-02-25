@@ -1,4 +1,7 @@
 # v0.0.11
+* Added an option to force stop streaming.
+* 
+# v0.0.11
 
 * Removed some files that made it into release v0.0.10
 
