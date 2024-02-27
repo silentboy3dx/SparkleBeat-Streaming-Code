@@ -27,12 +27,22 @@ class Playlist:
         self.forced_next_song = None
         self.remove_forced_song = False
         self.start_playing_at = 0
+        self.did_start_playing = False
 
         self.callbacks = {
             "forced_song_ended": []
         }
 
         self.stop_playing()
+
+    def has_started_playing(self):
+        """
+        Checks whether the player has started playing.
+
+        :return: True if the player has started playing, False otherwise
+        :rtype: bool
+        """
+        return self.did_start_playing
 
     def forced_song_ended(self):
         """
@@ -190,6 +200,7 @@ class Playlist:
         """
         self.is_currently_playing = True
         self.is_currently_stopped = False
+        self.did_start_playing = False
 
         self.current_index = self.start_playing_at
         self.last_current_index = 0
@@ -312,20 +323,20 @@ class Playlist:
         song = self.get_current_song()
         song.play()
 
-    def add_song_and_play_next(self, file: str, remove_after=False) -> None:
+    def add_song_and_play_next(self, song: Song, remove_after=False) -> None:
         """
         Add the given song file to the songs_array and play it next.
 
         Parameters:
             self (Playlist: The instance of the current object.
-            file (string): The file to add.
+            song (Song): The song to add
             remove_after (bool, optional): if set to True the forced song will be removed after playing.
 
         Returns:
             None
 
         """
-        self.songs_array.append(Song(file))
+        self.songs_array.append(song)
         self.forced_next_song = len(self.songs_array) - 1
         self.remove_forced_song = remove_after
 
