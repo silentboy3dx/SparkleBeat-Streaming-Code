@@ -393,7 +393,7 @@ class Stream:
 
         new_buffer = temp.read(bsize)
         while True:
-            if self.force_next is False or self.force_stop:
+            if self.force_next or self.force_stop:
                 break
 
             buf = new_buffer
