@@ -50,6 +50,7 @@ from streaming.playlist import Playlist
 from streaming.song import Song
 from streaming.stream import Stream
 from dotenv import load_dotenv
+from random import random
 import threading
 import os
 
@@ -74,13 +75,41 @@ requested_songs = []
 remove_requests = True
 
 
+@stream.song_announcement()
+def on_before_next_found(song: Song) -> Song or None:
+    """
+    Get announcement for the given song.
+
+    Args:
+        song (Song): The song for which to get the announcement.
+
+    Returns:
+        Song or None: Returns a Song object if an announcement is available for the given song, otherwise returns None.
+    """
+    print("Get announcement for song", song.get_song_name())
+    announce: bool = bool(random() < 1)
+
+    if announce:
+        return Song("announcement.mp3")
+
+    return None
+
+
+@stream.song_announcement_played()
+def on_announcement_finished_playing(song: Song) -> None:
+    print("Announcement finished played", song.get_song_name())
+
+    if os.path.isfile(song.get_filename()):
+        os.remove(song.get_filename())
+
+
+
 @stream.nextsong()
 def on_new_song(song: Song) -> None:
     """
     This function is called when a new song is starting.
     SparkleBeat uses this to send out notification of a new song to the game chat.
     """
-    
     print("Playing", song.get_song_name())
 
 
@@ -101,18 +130,24 @@ def on_forced_song_ended(song: Song) -> None:
             playlist.add_song_and_play_next(file, remove_after=remove_requests)
 
 
-def request_song(file: str, announce=False) -> None:
+def request_song(file: str, requested_by: str= "", announce=False) -> None:
     if announce is True:
         requested_songs.append("music/announcement.mp3")
 
     requested_songs.append(file)
-    playlist.add_song_and_play_next(file, remove_after=remove_requests)
+    playlist.add_song_and_play_next(Song(file, requested_by=requested_by), remove_after=remove_requests)
 
 
 playlist.from_directory(os.getenv("STREAM_MUSIC_DIRECTORY"))
 jingles.from_directory(os.getenv("STREAM_JINGLE_DIRECTORY"))
 advertisements.from_directory(os.getenv("STREAM_ADVERTISEMENT_DIRECTORY"))
 playlist.set_loop(True)
+
+"""
+Announcing songs is an optional feature specially made for Sparklebeat.
+This way if configured she could announce songs.
+"""
+stream.set_announce_songs(True)
 
 stream.set_playlist(playlist)
 stream.set_advertisements(advertisements)
@@ -129,15 +164,15 @@ this and the playlist will just play the songs in order.
 After playing a requested song the normal playlist will
 resume.
 """
-request_song("music/next.mp3")
+request_song("music/next.mp3", requested_by="Silentboy")
 
 try:
     while True:
         pass
 
 except KeyboardInterrupt:
-    for song in playlist.get_all_songs():
-        print(song.get_song_name())
+    pass
+
 
 ```
 
