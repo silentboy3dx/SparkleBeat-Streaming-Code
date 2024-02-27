@@ -89,7 +89,6 @@ class Stream:
         self.music_directory = music_directory
         self.shout.description = description
 
-
         self.current_playlist = None
         self.current_jingles = None
         self.current_advertisements = None
@@ -99,9 +98,12 @@ class Stream:
         self.advertisement_chance = 10
         self.force_next = False
         self.force_stop = False
+        self.announce_songs = False
 
         self.callbacks = {
-            "nextsong": []
+            "nextsong": [],
+            "song_announcement": None,
+            "song_announcement_played": None,
         }
 
     def __enter__(self):
@@ -109,6 +111,9 @@ class Stream:
 
     def __exit__(self, type, value, tb):
         pass
+
+    def set_announce_songs(self, should_announce: bool):
+        self.announce_songs = should_announce
 
     def nextsong(self) -> Callable:
         """
@@ -124,6 +129,42 @@ class Stream:
 
         def inner(f):
             self.callbacks["nextsong"].append(f)
+            return f
+
+        return inner
+
+    def song_announcement(self) -> Callable:
+        """
+        Registers a callback function to be executed when the next song is played.
+
+        Parameters:
+            self: The current instance of the class.
+
+        Return Type:
+            None
+
+        """
+
+        def inner(f):
+            self.callbacks["song_announcement"] = f
+            return f
+
+        return inner
+
+    def song_announcement_played(self) -> Callable:
+        """
+        Registers a callback function to be executed when the next song is played.
+
+        Parameters:
+            self: The current instance of the class.
+
+        Return Type:
+            None
+
+        """
+
+        def inner(f):
+            self.callbacks["song_announcement_played"] = f
             return f
 
         return inner
@@ -144,6 +185,45 @@ class Stream:
         """
         for callback in self.callbacks["nextsong"]:
             callback(self.get_current_song())
+
+    def request_next_song_announcement(self) -> Song or None:
+        """
+        Advertises a new song by invoking the registered callbacks.
+
+        Parameters:
+            self: The current instance of the class.
+
+        Return Type:
+            None
+
+        Example Usage:
+        advertise_new_song(self)
+
+        """
+
+        callback = self.callbacks["song_announcement"]
+        if callable(callback):
+            return callback(self.get_current_song())
+
+        return None
+
+    def announcement_finished_playing(self, song: Song) -> None:
+        """
+        Performs callback when the announcement for a song has finished playing.
+
+        Parameters:
+            self (object): The instance of the class.
+            song (Song): The song for which the announcement has finished playing.
+
+        Returns:
+            None: This method does not return any value.
+        """
+        callback = self.callbacks["song_announcement_played"]
+        if callable(callback):
+            return callback(song)
+
+        return None
+
 
     def set_playlist(self, playlist) -> None:
         """
@@ -243,6 +323,13 @@ class Stream:
 
             while self.current_playlist.is_playing():
                 self.current_song = self.current_playlist.get_current_song()
+
+                if self.announce_songs:
+                    announcement: Song or None = self.request_next_song_announcement()
+                    if announcement:
+                        self.stream_audio(announcement)
+                        self.announcement_finished_playing(announcement)
+
                 self.advertise_new_song()
                 self.stream_audio(self.current_playlist.get_current_song())
 
@@ -256,7 +343,8 @@ class Stream:
                     delta = (100 - self.jingle_or_advertisement_chance)
 
                     matched = False
-                    if self.current_jingles and self.jingle_chance <= delta and len(self.current_jingles.get_all_songs()) > 0:
+                    if self.current_jingles and self.jingle_chance <= delta and len(
+                            self.current_jingles.get_all_songs()) > 0:
                         self.current_song = self.current_jingles.get_current_song()
                         self.stream_audio(self.current_jingles.get_current_song())
                         self.current_jingles.next_song()
@@ -315,7 +403,3 @@ class Stream:
         temp.close()
 
         self.force_next = False
-
-
-
-

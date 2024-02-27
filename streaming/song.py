@@ -12,13 +12,35 @@ class Song:
         file (str): The path to the song file.
         basename (str): The filename of the song file.
     """
-    def __init__(self, file):
+
+    def __init__(self, file: str, requested_by: str = ""):
         self.is_playing = False
         self.is_paused = False
         self.is_stopped = True
+        self.requested_by = requested_by
         self.file = file
         self.basename = os.path.basename(self.file)
-    
+
+    def is_request(self):
+        """
+
+        Check if the song was requested.
+
+        Returns:
+            bool: True if the object has requests, False otherwise.
+
+        """
+        return len(self.requested_by) > 0
+
+    def get_requested_by(self):
+        """
+        Returns the name of the person requesting the song.
+
+        :return: The value of the 'requested_by' parameter.
+        :rtype: The data type of the 'requested_by' parameter.
+        """
+        return self.requested_by
+
     def play(self) -> None:
         """
         Start playing the audio.
@@ -34,7 +56,7 @@ class Song:
         self.is_playing = True
         self.is_paused = False
         self.is_stopped = False
-    
+
     def pause(self) -> None:
         """
         This method pauses the playback of the audio.
@@ -50,7 +72,7 @@ class Song:
         self.is_playing = False
         self.is_paused = True
         self.is_stopped = False
-    
+
     def stop(self) -> None:
         """
         Stops the playback.
@@ -68,10 +90,10 @@ class Song:
         self.is_playing = False
         self.is_paused = False
         self.is_stopped = True
-    
+
     def playing(self) -> bool:
         return self.is_playing
-    
+
     def get_filename(self) -> str:
         """
         Get the filename of the current instance.
@@ -80,7 +102,7 @@ class Song:
             str: The filename of the current instance.
         """
         return self.file
-    
+
     def get_song_name(self) -> str:
         """
         Format song name from filename

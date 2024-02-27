@@ -1,3 +1,10 @@
+# v0.0.14
+
+* Added an option to the song object to construct it with the requested_by parameter.
+* Added a trigger to the stream object to announce songs with two new decorators stream.song_announcement()
+  and stream.song_announcement_played()
+
+
 # v0.0.13 and v0.0.13.1
 * Fixed a bug that could crash the stream if there are no jingles.
 
