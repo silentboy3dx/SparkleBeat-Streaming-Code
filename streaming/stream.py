@@ -395,6 +395,7 @@ class Stream:
             if self.force_next or self.force_stop:
                 break
 
+            self.shout.sync()
             buffer = temp.read(bsize)
 
             if len(buffer) == 0:
