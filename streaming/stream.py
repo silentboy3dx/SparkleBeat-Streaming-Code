@@ -75,7 +75,7 @@ class Stream:
         self.shout.audio_info = {
             shout.SHOUT_AI_BITRATE: "128",
             shout.SHOUT_AI_SAMPLERATE: "44100",
-            shout.SHOUT_AI_CHANNELS: "5",
+            shout.SHOUT_AI_CHANNELS: "2",
         }
         self.shout.format = "mp3"  # using mp3 but it can also be ogg vorbis
         self.shout.genre = genre
@@ -223,7 +223,6 @@ class Stream:
             return callback(song)
 
         return None
-
 
     def set_playlist(self, playlist) -> None:
         """
@@ -388,16 +387,22 @@ class Stream:
             None
 
         """
+        bsize:int = 8192
         temp = open(song.get_filename(), "rb")
         self.shout.set_metadata({"song": song.get_song_name()})
-        new_buffer = temp.read(4096)
-        while len(new_buffer) != 0 and self.force_next is False:
-            if self.force_stop:
+
+        new_buffer = temp.read(bsize)
+        while True:
+            if self.force_next is False or self.force_stop:
                 break
 
-            buffer = new_buffer
-            new_buffer = temp.read(4096)
-            self.shout.send(buffer)
+            buf = new_buffer
+            new_buffer = temp.read(bsize)
+
+            if len(buf) == 0:
+                break
+
+            self.shout.send(buf)
             self.shout.sync()
 
         temp.close()
