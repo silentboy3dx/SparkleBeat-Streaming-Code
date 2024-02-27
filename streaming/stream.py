@@ -391,20 +391,17 @@ class Stream:
         temp = open(song.get_filename(), "rb")
         self.shout.set_metadata({"song": song.get_song_name()})
 
-        new_buffer = temp.read(bsize)
         while True:
             if self.force_next or self.force_stop:
                 break
 
-            buf = new_buffer
-            new_buffer = temp.read(bsize)
+            buffer = temp.read(bsize)
 
-            if len(buf) == 0:
+            if len(buffer) == 0:
                 break
 
-            self.shout.send(buf)
+            self.shout.send(buffer)
             self.shout.sync()
 
         temp.close()
-
         self.force_next = False
