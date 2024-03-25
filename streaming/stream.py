@@ -107,6 +107,8 @@ class Stream:
             "song_announcement": None,
             "song_announcement_played": None,
             "prepare_next_announcement": None,
+            "stream_started": None,
+            "stream_ended": None
         }
 
     def __enter__(self):
@@ -179,6 +181,20 @@ class Stream:
 
         return inner
 
+    def stream_started(self):
+        def inner(f):
+            self.callbacks["stream_started"] = f
+            return f
+
+        return inner
+
+    def stream_ended(self):
+        def inner(f):
+            self.callbacks["stream_ended"] = f
+            return f
+
+        return inner
+
     def advertise_new_song(self) -> None:
         """
         Advertises a new song by invoking the registered callbacks.
@@ -207,9 +223,25 @@ class Stream:
         if callable(callback):
             song = self.current_playlist.get_next_song()
             if song:
-                thread = threading.Thread(target=callback, args=(song, ))
+                thread = threading.Thread(target=callback, args=(song,))
                 thread.start()
                 thread.join()
+
+    def _stream_start(self) -> None:
+        """
+        Advertise the stream has started.
+        """
+        callback = self.callbacks["stream_started"]
+        if callable(callback):
+            callback()
+
+    def _stream_ended(self) -> None:
+        """
+        Advertise the stream has ended.
+        """
+        callback = self.callbacks["stream_ended"]
+        if callable(callback):
+            callback()
 
     def request_next_song_announcement(self) -> Song or None:
         """
@@ -260,7 +292,7 @@ class Stream:
             None
 
         """
-        self.stop()
+        self.stop(False)
         self.force_stop = False
         self.current_playlist = playlist
 
@@ -345,6 +377,7 @@ class Stream:
         if self.current_playlist:
 
             self.current_playlist.start_playing()
+            self._stream_start()
 
             while self.current_playlist.is_playing():
                 self.current_song = self.current_playlist.get_current_song()
@@ -384,12 +417,13 @@ class Stream:
 
                 self.current_playlist.next_song()
 
-    def stop(self) -> None:
+    def stop(self, announce: bool = True) -> None:
         """
         Stops the current playing playlist.
 
         Parameters:
             self: The instance of the class.
+            announce: If true the stream stoping will be announced.
 
         Return Type:
             None
@@ -400,6 +434,9 @@ class Stream:
         """
         if self.current_playlist:
             self.current_playlist.stop_playing()
+
+        if announce:
+            self._stream_ended()
 
         self.force_stop = True
 
@@ -414,7 +451,7 @@ class Stream:
             None
 
         """
-        bsize:int = 8192
+        bsize: int = 8192
         temp = open(song.get_filename(), "rb")
         self.shout.set_metadata({"song": song.get_song_name()})
 

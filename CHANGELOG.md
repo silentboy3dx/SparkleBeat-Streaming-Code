@@ -1,3 +1,8 @@
+# v0.0.15
+
+* Updated the example code.
+* Added decorators for @stream_started and @stream_ended
+
 # v0.0.14
 
 * Added an option to the song object to construct it with the requested_by parameter.
