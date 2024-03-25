@@ -51,7 +51,7 @@ from streaming.song import Song
 from streaming.stream import Stream
 from dotenv import load_dotenv
 from random import random
-import threading
+import threading, atexit
 import os
 
 load_dotenv()
@@ -75,8 +75,18 @@ requested_songs = []
 remove_requests = True
 
 
+@stream.stream_started()
+def on_stream_started():
+    print("stream started")
+
+
+@stream.stream_ended()
+def on_stream_ended():
+    print("stream ended")
+
+
 @stream.song_announcement()
-def on_before_next_found(song: Song) -> Song or None:
+def on_announce_next_song(song: Song) -> Song or None:
     """
     Get announcement for the given song.
 
@@ -97,11 +107,24 @@ def on_before_next_found(song: Song) -> Song or None:
 
 @stream.song_announcement_played()
 def on_announcement_finished_playing(song: Song) -> None:
+    """
+    At this point you could remove the announcement file.
+    """
     print("Announcement finished played", song.get_song_name())
 
-    if os.path.isfile(song.get_filename()):
-        os.remove(song.get_filename())
+    """
+    Uncomment if needed.
+    """
+    # if os.path.isfile(song.get_filename()):
+    #     os.remove(song.get_filename())
 
+
+@stream.prepare_announcement()
+def on_prepare_next_announcement(song: Song):
+    """
+    Generate your announcement mp3's here.
+    """
+    pass
 
 
 @stream.nextsong()
@@ -130,12 +153,17 @@ def on_forced_song_ended(song: Song) -> None:
             playlist.add_song_and_play_next(file, remove_after=remove_requests)
 
 
-def request_song(file: str, requested_by: str= "", announce=False) -> None:
+def request_song(file: str, requested_by: str = "", announce=False) -> None:
     if announce is True:
         requested_songs.append("music/announcement.mp3")
 
     requested_songs.append(file)
     playlist.add_song_and_play_next(Song(file, requested_by=requested_by), remove_after=remove_requests)
+
+
+@atexit.register
+def on_exit():
+    stream.stop()
 
 
 playlist.from_directory(os.getenv("STREAM_MUSIC_DIRECTORY"))
@@ -172,8 +200,6 @@ try:
 
 except KeyboardInterrupt:
     pass
-
-
 ```
 
  
