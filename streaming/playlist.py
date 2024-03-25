@@ -167,6 +167,17 @@ class Playlist:
         """
         return self.songs_array[self.current_index]
 
+    def get_next_song(self) -> Song:
+        _last_current_index = self.last_current_index
+        _current_index = self.current_index
+
+        self.next_song()
+        song = self.get_current_song()
+
+        self.last_current_index = _last_current_index
+        self.current_index = _current_index
+        return song
+
     def start_playing_at_position(self, position: int) -> None:
         """
         Start playing at the specified position.

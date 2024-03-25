@@ -1,3 +1,5 @@
+import threading
+
 import shout
 import random
 from .song import Song
@@ -104,6 +106,7 @@ class Stream:
             "nextsong": [],
             "song_announcement": None,
             "song_announcement_played": None,
+            "prepare_next_announcement": None,
         }
 
     def __enter__(self):
@@ -169,6 +172,13 @@ class Stream:
 
         return inner
 
+    def prepare_announcement(self):
+        def inner(f):
+            self.callbacks["prepare_next_announcement"] = f
+            return f
+
+        return inner
+
     def advertise_new_song(self) -> None:
         """
         Advertises a new song by invoking the registered callbacks.
@@ -184,7 +194,22 @@ class Stream:
 
         """
         for callback in self.callbacks["nextsong"]:
-            callback(self.get_current_song())
+            if callable(callback):
+                callback(self.get_current_song())
+
+    def _prepare_next_announcement(self) -> None:
+        """
+        Prepare the next announcement by invoking all the callbacks registered for the "prepare_next_announcement" event.
+
+        :return: None
+        """
+        callback = self.callbacks["prepare_next_announcement"]
+        if callable(callback):
+            song = self.current_playlist.get_next_song()
+            if song:
+                thread = threading.Thread(target=callback, args=(song, ))
+                thread.start()
+                thread.join()
 
     def request_next_song_announcement(self) -> Song or None:
         """
@@ -223,7 +248,6 @@ class Stream:
             return callback(song)
 
         return None
-
 
     def set_playlist(self, playlist) -> None:
         """
@@ -317,6 +341,7 @@ class Stream:
 
         self.shout.open()
 
+        self._prepare_next_announcement()
         if self.current_playlist:
 
             self.current_playlist.start_playing()
@@ -331,6 +356,7 @@ class Stream:
                         self.announcement_finished_playing(announcement)
 
                 self.advertise_new_song()
+                self._prepare_next_announcement()
                 self.stream_audio(self.current_playlist.get_current_song())
 
                 if self.force_stop:
