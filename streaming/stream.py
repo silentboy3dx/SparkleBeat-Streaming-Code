@@ -225,7 +225,7 @@ class Stream:
             if song:
                 thread = threading.Thread(target=callback, args=(song,))
                 thread.start()
-                thread.join()
+                # thread.join()
 
     def _stream_start(self) -> None:
         """
