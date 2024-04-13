@@ -35,7 +35,6 @@ class M3U:
                     if len(info) == 2:
                         info = info[1]
                         if '-' in info:
-                            # print("LINE",  info, info.find('-'))
                             if info.count('-') > 1:
                                 name, artist = info.split('-', 1)
                             else:
