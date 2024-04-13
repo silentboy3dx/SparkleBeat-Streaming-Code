@@ -1,5 +1,5 @@
 import os.path
-
+from .parsers.m3u import M3U
 from .song import Song
 from glob import glob
 
@@ -145,6 +145,16 @@ class Playlist:
         for file in self.files_array:
             if os.path.basename(file) != "next.mp3":
                 self.songs_array.append(Song(file))
+
+    def from_m3u_file(self, m3u_path: str) -> None:
+        m3u: M3U = M3U(m3u_path)
+
+        if len(m3u.data):
+            for record in m3u.data:
+                song: Song = Song(file=record['file'], song_name=record['name'], song_artist=record['artist'])
+                self.songs_array.append(song)
+
+
 
     def get_all_songs(self) -> list[Song]:
         """

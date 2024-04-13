@@ -158,7 +158,7 @@ def request_song(file: str, requested_by: str = "", announce=False) -> None:
         requested_songs.append("music/announcement.mp3")
 
     requested_songs.append(file)
-    playlist.add_song_and_play_next(Song(file, requested_by=requested_by), remove_after=remove_requests)
+    playlist.add_song_and_play_next(Song(file, song_requested_by=requested_by), remove_after=remove_requests)
 
 
 @atexit.register

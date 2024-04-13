@@ -13,13 +13,21 @@ class Song:
         basename (str): The filename of the song file.
     """
 
-    def __init__(self, file: str, requested_by: str = ""):
+    def __init__(self, file: str,  song_name = "", song_artist: str = "", song_requested_by: str = ""):
         self.is_playing = False
         self.is_paused = False
         self.is_stopped = True
-        self.requested_by = requested_by
+        self.requested_by = song_requested_by
         self.file = file
         self.basename = os.path.basename(self.file)
+        self.song_name =  song_name
+        self.artist = song_artist
+
+        if len(song_name) == 0:
+            name: str = self.basename.split("/")[-1].split(".")
+            name = (".".join(name[:len(name) - 1]).replace("_", " ").replace("-", " - "))
+            self.set_song_name(name)
+
 
     def is_request(self):
         """
@@ -103,12 +111,22 @@ class Song:
         """
         return self.file
 
+    def set_song_name(self, song_name: str) -> None:
+        self.song_name = song_name
+
     def get_song_name(self) -> str:
         """
         Format song name from filename
         strips "mp3" and changes _ to " "
         Used for metadata
         """
-        result = self.basename.split("/")[-1].split(".")
-        result = (".".join(result[:len(result) - 1]).replace("_", " ").replace("-", " - "))
-        return result
+        return self.song_name
+
+    def get_artist(self) -> str:
+        """
+        Get the artist of the current instance.
+
+        Returns:
+            str: The artist of the current instance.
+        """
+        return self.artist

@@ -1,3 +1,8 @@
+# v0.0.16
+
+* Added support for nm3u playlist files, fixing #12
+* 
+
 # v0.0.15
 
 * Updated the example code.
