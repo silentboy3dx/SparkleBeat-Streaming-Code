@@ -101,6 +101,7 @@ class Stream:
         self.force_next = False
         self.force_stop = False
         self.announce_songs = False
+        self.has_started = False
 
         self.callbacks = {
             "nextsong": [],
@@ -378,6 +379,7 @@ class Stream:
 
             self.current_playlist.start_playing()
             self._stream_start()
+            self.has_started = True
 
             while self.current_playlist.is_playing():
                 self.current_song = self.current_playlist.get_current_song()
@@ -435,10 +437,11 @@ class Stream:
         if self.current_playlist:
             self.current_playlist.stop_playing()
 
-        if announce:
+        if announce and self.has_started:
             self._stream_ended()
 
         self.force_stop = True
+        self.has_started = False
 
     def stream_audio(self, song: Song) -> None:
         """
