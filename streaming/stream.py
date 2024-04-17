@@ -119,7 +119,22 @@ class Stream:
         pass
 
     def set_announce_songs(self, should_announce: bool):
+        """
+        Set the value for the announce_songs property.
+
+        Parameters:
+        - should_announce (bool): A boolean value indicating whether to announce the songs.
+
+        """
         self.announce_songs = should_announce
+
+    def should_announce_songs(self):
+        """
+        Determines whether the songs should be announced.
+
+        :return: True if the songs should be announced, False otherwise
+        """
+        return self.announce_songs
 
     def nextsong(self) -> Callable:
         """

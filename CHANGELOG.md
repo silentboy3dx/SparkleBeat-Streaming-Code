@@ -1,7 +1,8 @@
 # v0.0.16
 
 * Added support for nm3u playlist files, fixing #12
-* 
+* Added the function should_announce_songs() to the stream class.
+
 
 # v0.0.15
 
