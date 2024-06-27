@@ -1,5 +1,4 @@
 import threading
-
 import shout
 import random
 from .song import Song
