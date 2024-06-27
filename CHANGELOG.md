@@ -1,7 +1,9 @@
 # v0.0.16
 
+* Fixed a bug where the end stream callback was triggered even the stream did not start. Fixing #11 
+* Fixed a bug where announcements for songs would not play for the first song in the playlist.
 * Added support for nm3u playlist files, fixing #12
-* Added the function should_announce_songs() to the stream class.
+* Added the function should_announce_songs() to the stream class. Fixing #14
 
 
 # v0.0.15

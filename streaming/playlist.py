@@ -66,6 +66,7 @@ class Playlist:
         my_class = MyClass()
         my_class.callbacks["forced_song_ended"][0]()  # Output: "Song ended"
         """
+
         def inner(f):
             self.callbacks["forced_song_ended"].append(f)
             return f
@@ -153,8 +154,6 @@ class Playlist:
             for record in m3u.data:
                 song: Song = Song(file=record['file'], song_name=record['name'], song_artist=record['artist'])
                 self.songs_array.append(song)
-
-
 
     def get_all_songs(self) -> list[Song]:
         """

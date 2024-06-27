@@ -36,9 +36,9 @@ class M3U:
                         info = info[1]
                         if '-' in info:
                             if info.count('-') > 1:
-                                name, artist = info.split('-', 1)
+                                artist, name = info.split('-', 1)
                             else:
-                                name, artist = info.split('-')
+                                artist, name = info.split('-')
                             entry['name'] = name.strip()
                             entry['artist'] = artist.strip()
 

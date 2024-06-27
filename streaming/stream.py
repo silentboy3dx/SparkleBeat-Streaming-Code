@@ -7,59 +7,6 @@ from typing import Callable
 
 
 class Stream:
-    """
-    This class represents a live audio streaming object. It allows you to start and stop playing a playlist of songs
-    or audio files and dynamically switch between songs, jingles, and advertisements.
-
-    Attributes:
-    - shout: An instance of the shoutcast library used for streaming audio.
-    - shout.host: The host name or IP address of the shoutcast server.
-    - shout.port: The port number of the shoutcast server.
-    - shout.password: The password for accessing the shoutcast server.
-    - shout.mount: The mount point for streaming the audio.
-    - shout.name: The name of the streaming station.
-    - shout.url: The URL associated with the streaming station.
-    - shout.description: The description of the streaming station.
-    - current_playlist: The current playlist being played.
-    - current_jingles: The list of jingles for the current instance.
-    - current_advertisements: The list of advertisements for the current instance.
-    - current_song: The current song being played.
-    - jingle_or_advertisement_chance: The chance for playing a jingle or advertisement during a song.
-    - jingle_chance: The chance for playing a jingle instead of an advertisement.
-    - advertisement_chance: The chance for playing an advertisement instead of a jingle.
-    - force_next: A flag to force skipping to the next song.
-
-    Methods:
-    - nextsong(callback: Callable) -> Callable:
-        Registers a callback function to be executed when the next song is played.
-
-    - advertise_new_song() -> None:
-        Advertises a new song by invoking the registered callbacks.
-
-    - set_playlist(playlist: Any) -> None:
-        Sets the current playlist.
-
-    - set_advertisements(advertisements: List) -> None:
-        Sets the list of advertisements for the current instance.
-
-    - set_jingles(jingles: List) -> None:
-        Sets the list of jingles for the current instance.
-
-    - get_current_song() -> Song:
-        Returns the current song being played.
-
-    - next_song() -> None:
-        Sets the 'force_next' flag to True.
-
-    - start() -> None:
-        Starts playing the audio stream.
-
-    - stop() -> None:
-        Stops the current playing playlist.
-
-    - stream_audio(song: Song) -> None:
-        Streams audio from a given Song object to the shoutcast server.
-    """
 
     def __init__(
             self,
@@ -107,6 +54,7 @@ class Stream:
             "nextsong": [],
             "song_announcement": None,
             "song_announcement_played": None,
+            "should_announce_next_song": None,
             "prepare_next_announcement": None,
             "stream_started": None,
             "stream_ended": None
@@ -118,7 +66,7 @@ class Stream:
     def __exit__(self, type, value, tb):
         pass
 
-    def set_announce_songs(self, should_announce: bool):
+    def set_announce_songs(self, should_announce: bool) -> None:
         """
         Set the value for the announce_songs property.
 
@@ -128,7 +76,7 @@ class Stream:
         """
         self.announce_songs = should_announce
 
-    def should_announce_songs(self):
+    def is_announcing_songs(self) -> bool:
         """
         Determines whether the songs should be announced.
 
@@ -150,6 +98,13 @@ class Stream:
 
         def inner(f):
             self.callbacks["nextsong"].append(f)
+            return f
+
+        return inner
+
+    def should_announce_next_song(self) -> Callable:
+        def inner(f):
+            self.callbacks["should_announce_next_song"] = f
             return f
 
         return inner
@@ -192,12 +147,40 @@ class Stream:
 
     def prepare_announcement(self):
         def inner(f):
+            """
+
+                Add a callback function to handle the preparation of the next announcement.
+
+                Args:
+                    f (function): The callback function to be added.
+
+                Returns:
+                    function: The same callback function.
+
+            """
             self.callbacks["prepare_next_announcement"] = f
             return f
 
         return inner
 
     def stream_started(self):
+        """
+        Sets the callback function for when a stream has started.
+
+        Parameters:
+            f (function): The callback function to be set.
+
+        Returns:
+            The callback function.
+
+        Example:
+            >>> def my_callback():
+            ...     print("Stream has started")
+            ...
+            >>> obj = MyClass()
+            >>> obj.stream_started()(my_callback)
+            Stream has started
+        """
         def inner(f):
             self.callbacks["stream_started"] = f
             return f
@@ -205,6 +188,12 @@ class Stream:
         return inner
 
     def stream_ended(self):
+        """
+        Registers a callback function to be executed when the stream has ended.
+
+        :param self: The instance of the class.
+        :return: The callback function.
+        """
         def inner(f):
             self.callbacks["stream_ended"] = f
             return f
@@ -227,7 +216,24 @@ class Stream:
         """
         for callback in self.callbacks["nextsong"]:
             if callable(callback):
-                callback(self.get_current_song())
+                if callback.__code__.co_argcount > 0:
+                    callback(self.get_current_song())
+                else:
+                    callback()
+
+    def _should_announce_next_song(self) -> None:
+        """
+        Check if the next song should be announced.
+
+        Parameters:
+            self: The instance of the class.
+
+        Returns:
+            None
+        """
+        callback = self.callbacks["should_announce_next_song"]
+        if callable(callback):
+            self.announce_songs = callback()
 
     def _prepare_next_announcement(self) -> None:
         """
@@ -235,13 +241,15 @@ class Stream:
 
         :return: None
         """
+        if not self.announce_songs:
+            return
+
         callback = self.callbacks["prepare_next_announcement"]
         if callable(callback):
             song = self.current_playlist.get_next_song()
             if song:
                 thread = threading.Thread(target=callback, args=(song,))
                 thread.start()
-                # thread.join()
 
     def _stream_start(self) -> None:
         """
@@ -276,7 +284,10 @@ class Stream:
 
         callback = self.callbacks["song_announcement"]
         if callable(callback):
-            return callback(self.get_current_song())
+            if callback.__code__.co_argcount > 0:
+                return callback(self.get_current_song())
+            else:
+                return callback()
 
         return None
 
@@ -293,7 +304,10 @@ class Stream:
         """
         callback = self.callbacks["song_announcement_played"]
         if callable(callback):
-            return callback(song)
+            if callback.__code__.co_argcount > 0:
+                return callback(song)
+            else:
+                return callback()
 
         return None
 
@@ -388,8 +402,9 @@ class Stream:
             pass
 
         self.shout.open()
-
+        self._should_announce_next_song()
         self._prepare_next_announcement()
+
         if self.current_playlist:
 
             self.current_playlist.start_playing()
@@ -406,6 +421,7 @@ class Stream:
                         self.announcement_finished_playing(announcement)
 
                 self.advertise_new_song()
+                self._should_announce_next_song()
                 self._prepare_next_announcement()
                 self.stream_audio(self.current_playlist.get_current_song())
 
@@ -440,7 +456,7 @@ class Stream:
 
         Parameters:
             self: The instance of the class.
-            announce: If true the stream stoping will be announced.
+            announce: If true the stream stopping will be announced.
 
         Return Type:
             None

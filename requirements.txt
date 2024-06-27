@@ -1,6 +1,6 @@
 colorama==0.4.4
 colorlog==6.6.0
 pretty-errors==1.2.25
-python-shout==0.2.7
+python-shout
 pretty_errors
 python-dotenv
