@@ -500,7 +500,6 @@ class Stream:
         temp = open(song.get_filename(), "rb")
         self.shout.set_metadata({"song": song.get_song_name()})
 
-        print("Streaming ", song.get_song_name())
         while True:
             if self.force_next or self.force_stop:
                 break
