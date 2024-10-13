@@ -144,8 +144,9 @@ class Playlist:
         self.files_array = glob(directory + "/*.[mM][Pp]3")
         self.files_array.sort()
 
+        print("files_array", self.files_array)
         for file in self.files_array:
-            if os.path.basename(file) != "next.mp3":
+            if os.path.basename(file):
                 self.songs_array.append(Song(file))
 
     def from_m3u_file(self, m3u_path: str) -> None:
