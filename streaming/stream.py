@@ -281,7 +281,6 @@ class Stream:
         advertise_new_song(self)
 
         """
-        print("request_next_song_announcement current song", self.current_song)
         callback = self.callbacks["song_announcement"]
         if callable(callback):
             if callback.__code__.co_argcount > 0:
@@ -355,7 +354,6 @@ class Stream:
 
     def set_first_song(self):
         self.current_song = self.current_playlist.get_first_song()
-        print("DID SET CURRENT SONG to", self.current_song)
 
     def get_current_song(self) -> Song:
         """

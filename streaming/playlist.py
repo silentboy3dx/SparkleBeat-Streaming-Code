@@ -198,8 +198,6 @@ class Playlist:
 
         :return: Song
         """
-        print("Current index", self.current_index)
-        print("songs_array", self.songs_array)
         if  len(self.songs_array) >= self.current_index:
             return self.songs_array[self.current_index]
 
