@@ -287,6 +287,7 @@ class Stream:
             if callback.__code__.co_argcount > 0:
                 return callback(self.get_current_song())
             else:
+                print("DOING ELSE")
                 return callback()
 
         return None
