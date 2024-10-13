@@ -281,7 +281,7 @@ class Stream:
         advertise_new_song(self)
 
         """
-
+        print("request_next_song_announcement current song", self.current_song)
         callback = self.callbacks["song_announcement"]
         if callable(callback):
             if callback.__code__.co_argcount > 0:
