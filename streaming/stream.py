@@ -352,6 +352,11 @@ class Stream:
         """
         self.current_jingles = jingles
 
+
+    def set_first_song(self):
+        self.current_song = self.current_playlist.get_first_song()
+        print("DID SET CURRENT SONG to", self.current_song)
+
     def get_current_song(self) -> Song:
         """
         Returns the current song.
@@ -402,8 +407,7 @@ class Stream:
             pass
 
         self.shout.open()
-        self.current_song = self.current_playlist.get_first_song()
-        print("DID SET CURRENT SONG to", self.current_song)
+        self.set_first_song()
         self._should_announce_next_song()
         self._prepare_next_announcement()
 
