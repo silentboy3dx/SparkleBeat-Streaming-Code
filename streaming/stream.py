@@ -404,6 +404,9 @@ class Stream:
         except Exception:
             pass
 
+
+        is_first_song: bool = True
+
         self.shout.open()
         self.set_first_song()
         self._should_announce_next_song()
@@ -426,7 +429,10 @@ class Stream:
 
                 self.advertise_new_song()
                 self._should_announce_next_song()
-                self._prepare_next_announcement()
+
+                if not is_first_song:
+                    self._prepare_next_announcement()
+
                 self.stream_audio(self.current_playlist.get_current_song())
 
                 if self.force_stop:
@@ -453,6 +459,7 @@ class Stream:
                         self.current_advertisements.next_song()
 
                 self.current_playlist.next_song()
+                is_first_song = False
 
     def stop(self, announce: bool = True) -> None:
         """
@@ -493,6 +500,7 @@ class Stream:
         temp = open(song.get_filename(), "rb")
         self.shout.set_metadata({"song": song.get_song_name()})
 
+        print("Streaming ", song.get_song_name())
         while True:
             if self.force_next or self.force_stop:
                 break
