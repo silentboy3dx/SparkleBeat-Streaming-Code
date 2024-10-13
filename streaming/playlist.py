@@ -337,7 +337,7 @@ class Playlist:
 
         self.play_current_song()
 
-    def play_current_song(self) -> None:
+    def play_current_song(self) -> bool:
         """
         Plays the current song in the media player.
 
@@ -346,7 +346,12 @@ class Playlist:
 
         """
         song = self.get_current_song()
-        song.play()
+
+        if song:
+            song.play()
+            return True
+
+        return False
 
     def add_song_and_play_next(self, song: Song, remove_after=False) -> None:
         """
