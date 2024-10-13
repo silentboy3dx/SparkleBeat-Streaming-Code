@@ -141,13 +141,14 @@ class Playlist:
         music_player.from_directory('/path/to/directory')
         ```
         """
+        print("directory", directory)
+
         if not os.path.isdir(directory):
             raise Exception("Directory not found.")
 
         self.files_array = glob(directory + "/*.[mM][Pp]3")
         self.files_array.sort()
 
-        print("directory", directory)
         print("files_array", self.files_array)
         for file in self.files_array:
             if os.path.basename(file):
@@ -185,9 +186,6 @@ class Playlist:
 
         :return: Song
         """
-        print("current_index", self.current_index)
-        print("songs_array", self.songs_array)
-
         if self.current_index in self.songs_array:
             return self.songs_array[self.current_index]
 
