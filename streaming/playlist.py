@@ -141,15 +141,12 @@ class Playlist:
         music_player.from_directory('/path/to/directory')
         ```
         """
-        print("directory", directory)
-
         if not os.path.isdir(directory):
             raise Exception("Directory not found.")
 
         self.files_array = glob(directory + "/*.[mM][Pp]3")
         self.files_array.sort()
 
-        print("files_array", self.files_array)
         for file in self.files_array:
             if os.path.basename(file):
                 self.songs_array.append(Song(file))
