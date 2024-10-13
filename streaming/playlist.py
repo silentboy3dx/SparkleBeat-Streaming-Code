@@ -154,6 +154,11 @@ class Playlist:
                 self.songs_array.append(Song(file))
 
     def from_m3u_file(self, m3u_path: str) -> None:
+
+        if not os.path.isfile(m3u_path):
+            raise Exception("Playlist not found.")
+
+
         m3u: M3U = M3U(m3u_path)
 
         if len(m3u.data):
