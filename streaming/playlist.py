@@ -198,6 +198,8 @@ class Playlist:
 
         :return: Song
         """
+        print("Current index", self.current_index)
+        print("songs_array", self.songs_array)
         if self.current_index in self.songs_array:
             return self.songs_array[self.current_index]
 
