@@ -178,7 +178,7 @@ class Playlist:
         print("current_index", self.current_index)
         print("songs_array", self.songs_array)
 
-        if len(self.songs_array) and self.current_index <= len(self.songs_array):
+        if self.current_index in self.songs_array:
             return self.songs_array[self.current_index]
 
     def get_next_song(self) -> Song:
