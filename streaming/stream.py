@@ -403,7 +403,7 @@ class Stream:
 
         self.shout.open()
         self.current_song = self.current_playlist.get_first_song()
-        print("DID SET CURRENT SONG")
+        print("DID SET CURRENT SONG to", self.current_song)
         self._should_announce_next_song()
         self._prepare_next_announcement()
 
