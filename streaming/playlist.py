@@ -177,6 +177,21 @@ class Playlist:
         """
         return self.songs_array
 
+    def get_first_song(self) -> Song or None:
+        """
+        Returns the first song in the list of songs if available.
+
+        This method checks if the list of songs is not empty and returns the first song.
+        If the list is empty, it returns None.
+
+        Returns:
+            Song or None: The first song in the list if it exists, otherwise None.
+        """
+        if len(self.songs_array) > 0:
+            return self.songs_array[0]
+
+        return None
+
     def get_current_song(self) -> Song or None:
         """
         Returns the current song from the songs array.

@@ -1,6 +1,6 @@
 # v0.0.17
 * An exception will now been thrown if trying to load from a directory that is not found fixing #16.
-* 
+* The playlist class now has a new function called get_first_song()
 
 # v0.0.16
 
