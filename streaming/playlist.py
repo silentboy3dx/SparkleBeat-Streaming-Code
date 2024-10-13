@@ -141,6 +141,9 @@ class Playlist:
         music_player.from_directory('/path/to/directory')
         ```
         """
+        if not os.path.isdir(directory):
+            raise Exception("Directory not found.")
+
         self.files_array = glob(directory + "/*.[mM][Pp]3")
         self.files_array.sort()
 

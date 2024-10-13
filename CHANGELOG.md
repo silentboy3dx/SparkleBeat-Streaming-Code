@@ -1,3 +1,7 @@
+# v0.0.17
+* An exception will now been thrown if trying to load from a directory that is not found fixing #16.
+* 
+
 # v0.0.16
 
 * Fixed a bug where the end stream callback was triggered even the stream did not start. Fixing #11 
