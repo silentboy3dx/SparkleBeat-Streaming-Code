@@ -175,6 +175,8 @@ class Playlist:
 
         :return: Song
         """
+        print("current_index", self.current_index)
+        print("songs_array", self.songs_array)
         return self.songs_array[self.current_index]
 
     def get_next_song(self) -> Song:
