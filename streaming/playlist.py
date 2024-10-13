@@ -144,6 +144,7 @@ class Playlist:
         self.files_array = glob(directory + "/*.[mM][Pp]3")
         self.files_array.sort()
 
+        print("directory", directory)
         print("files_array", self.files_array)
         for file in self.files_array:
             if os.path.basename(file):
