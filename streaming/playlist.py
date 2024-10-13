@@ -169,7 +169,7 @@ class Playlist:
         """
         return self.songs_array
 
-    def get_current_song(self) -> Song:
+    def get_current_song(self) -> Song or None:
         """
         Returns the current song from the songs array.
 
@@ -177,7 +177,9 @@ class Playlist:
         """
         print("current_index", self.current_index)
         print("songs_array", self.songs_array)
-        return self.songs_array[self.current_index]
+
+        if len(self.songs_array) and self.current_index <= len(self.songs_array):
+            return self.songs_array[self.current_index]
 
     def get_next_song(self) -> Song:
         _last_current_index = self.last_current_index
