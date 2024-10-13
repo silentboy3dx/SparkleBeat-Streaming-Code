@@ -243,6 +243,7 @@ class Stream:
         if not self.announce_songs:
             return
 
+        print("has started", self.has_started)
         callback = self.callbacks["prepare_next_announcement"]
         if callable(callback):
             song = self.current_playlist.get_next_song()
