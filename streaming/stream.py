@@ -285,6 +285,7 @@ class Stream:
         callback = self.callbacks["song_announcement"]
         if callable(callback):
             if callback.__code__.co_argcount > 0:
+                print("Passing curent song")
                 return callback(self.get_current_song())
             else:
                 print("DOING ELSE")
