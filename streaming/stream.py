@@ -510,7 +510,7 @@ class Stream:
         try:
             while True:
                 if self.force_next or self.force_stop:
-                    print("Breaking")
+                    print(f"Breaking force_next:{self.force_next} force_stop: {self.force_stop}")
                     break
 
                 self.shout.sync()
