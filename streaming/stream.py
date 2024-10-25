@@ -402,12 +402,12 @@ class Stream:
 
         """
 
-        try:
-            if self.shout.get_connected():
-                self.shout.close()
-        except Exception as e:
-            print("Got an exception on closing an existing connection. ", str(e))
-
+        # try:
+        #     if self.shout.get_connected():
+        #         self.shout.close()
+        # except Exception as e:
+        #     print("Got an exception on closing an existing connection. ", str(e))
+        #
 
 
         is_first_song: bool = True
