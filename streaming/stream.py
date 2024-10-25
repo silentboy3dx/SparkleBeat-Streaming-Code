@@ -1,6 +1,9 @@
 import threading
 import shout
 import random
+
+from exceptiongroup import catch
+
 from .song import Song
 from typing import Callable
 
@@ -501,18 +504,22 @@ class Stream:
         print("Sending song", song.get_song_name())
         self.shout.set_metadata({"song": song.get_song_name()})
 
-        while True:
-            if self.force_next or self.force_stop:
-                break
+        try:
+            while True:
+                if self.force_next or self.force_stop:
+                    break
 
-            self.shout.sync()
-            buffer = temp.read(bsize)
+                self.shout.sync()
+                buffer = temp.read(bsize)
 
-            if len(buffer) == 0:
-                break
+                if len(buffer) == 0:
+                    break
 
-            self.shout.send(buffer)
-            self.shout.sync()
+                self.shout.send(buffer)
+                self.shout.sync()
 
-        temp.close()
-        self.force_next = False
+            temp.close()
+            self.force_next = False
+        except Exception as e:
+            print("Exception: ", str(e))
+
