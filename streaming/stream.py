@@ -403,7 +403,9 @@ class Stream:
         """
 
         try:
-            self.shout.close()
+            if self.shout.get_connected():
+                print("CLOSING ALREADY OPEN CONNECTION")
+                self.shout.close()
         except Exception:
             pass
 
