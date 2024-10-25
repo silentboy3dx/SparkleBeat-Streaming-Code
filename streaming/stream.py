@@ -503,6 +503,7 @@ class Stream:
         """
         bsize: int = 8192
         temp = open(song.get_filename(), "rb")
+        print("opening song", song.get_filename())
         print("Sending song", song.get_song_name())
         self.shout.set_metadata({"song": song.get_song_name()})
 
