@@ -487,6 +487,7 @@ class Stream:
         if announce and self.has_started:
             self._stream_ended()
 
+        print("Setting force stop")
         self.force_stop = True
         self.has_started = False
 
