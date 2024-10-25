@@ -509,17 +509,21 @@ class Stream:
         try:
             while True:
                 if self.force_next or self.force_stop:
+                    print("Breaking")
                     break
 
                 self.shout.sync()
                 buffer = temp.read(bsize)
 
+                print("Sending ", buffer)
                 if len(buffer) == 0:
+                    print("Break buffer len == 0")
                     break
 
                 self.shout.send(buffer)
                 self.shout.sync()
 
+            print("Closing stream file")
             temp.close()
             self.force_next = False
         except Exception as e:
