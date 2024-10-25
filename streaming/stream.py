@@ -517,7 +517,6 @@ class Stream:
                 self.shout.sync()
                 buffer = temp.read(bsize)
 
-                print("Sending ", buffer)
                 if len(buffer) == 0:
                     print("Break buffer len == 0")
                     break
