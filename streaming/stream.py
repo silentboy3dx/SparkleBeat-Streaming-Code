@@ -504,29 +504,22 @@ class Stream:
         """
         bsize: int = 8192
         temp = open(song.get_filename(), "rb")
-        print("opening song", song.get_filename())
         print("Sending song", song.get_song_name())
         self.shout.set_metadata({"song": song.get_song_name()})
 
-        try:
-            while True:
-                if self.force_next or self.force_stop:
-                    print(f"Breaking force_next:{self.force_next} force_stop: {self.force_stop}")
-                    break
+        while True:
+            if self.force_next or self.force_stop:
+                break
 
-                self.shout.sync()
-                buffer = temp.read(bsize)
+            self.shout.sync()
+            buffer = temp.read(bsize)
 
-                if len(buffer) == 0:
-                    print("Break buffer len == 0")
-                    break
+            if len(buffer) == 0:
+                break
 
-                self.shout.send(buffer)
-                self.shout.sync()
+            self.shout.send(buffer)
+            self.shout.sync()
 
-            print("Closing stream file")
-            temp.close()
-            self.force_next = False
-        except Exception as e:
-            print("Exception: ", str(e))
+        temp.close()
+        self.force_next = False
 
