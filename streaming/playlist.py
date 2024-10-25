@@ -212,23 +212,8 @@ class Playlist:
         self.current_index = _current_index
         return song
 
-    def start_playing_at_position(self, position: int) -> None:
-        """
-        Start playing at the specified position.
-
-        :param position: The position at which the playing should start.
-        :type position: int
-
-        Parameters:
-            self (Playlist): The current instance of the class.
-            position (int): The position at which the playing should start
-
-        Return Type:
-            None
-
-        """
+    def resume_playing_at_position(self, position: int) -> None:
         self.start_playing_at = position
-        self.start_playing()
 
     def start_playing(self) -> None:
         """

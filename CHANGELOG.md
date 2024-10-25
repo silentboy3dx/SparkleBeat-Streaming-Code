@@ -2,6 +2,7 @@
 * An exception will now been thrown if trying to load from a directory that is not found fixing #16.
 * The playlist class now has a new function called get_first_song()
 * The stream class now has a new function called set_first_song()
+* Removed Playlist::start_playing_at_position() in favour of Playlist::resume_playing_at_position(). The playlist object has no control over the stream this is better wording and doesnt autostart the stream anymore. Fixing #17
 
 # v0.0.16
 
