@@ -212,8 +212,32 @@ class Playlist:
         self.current_index = _current_index
         return song
 
-    def resume_playing_at_position(self, position: int) -> None:
+    def set_playlist_start_position(self, position: int) -> None:
+        """
+        Sets the start position of the playlist.
+
+        This method allows specifying the starting index from which
+        the playlist should begin playing.
+
+        Parameters:
+        position (int): The index position to start playing the playlist.
+        """
         self.start_playing_at = position
+
+    def resume_playing_at_position(self, position: int) -> None:
+        """
+        resume_playing_at_position(position: int) -> None
+
+        Resumes playing the media from a specified position in the playlist.
+
+        Parameters:
+         position: An integer representing the position in the playlist from where the playback should resume.
+
+        Side effects:
+         Changes the start position of the playlist for playback.
+
+        """
+        self.set_playlist_start_position(position)
 
     def start_playing(self) -> None:
         """
