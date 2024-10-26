@@ -3,6 +3,9 @@
 * The playlist class now has a new function called get_first_song()
 * The stream class now has a new function called set_first_song()
 * Removed Playlist::start_playing_at_position() in favour of Playlist::resume_playing_at_position(). The playlist object has no control over the stream this is better wording and doesnt autostart the stream anymore. Fixing #17
+* Added 2 new stream functions to change the percentages of jingles and advertisements playing (Stream::set_jingle_percent_chance() and Stream::set_advertisement_percent_chance()). Fixing #18 and #19
+
+
 
 # v0.0.16
 

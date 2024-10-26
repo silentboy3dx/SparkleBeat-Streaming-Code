@@ -424,14 +424,6 @@ class Stream:
 
         """
 
-        # try:
-        #     if self.shout.get_connected():
-        #         self.shout.close()
-        # except Exception as e:
-        #     print("Got an exception on closing an existing connection. ", str(e))
-        #
-
-
         is_first_song: bool = True
 
         self.shout.open()
@@ -509,7 +501,6 @@ class Stream:
         if announce and self.has_started:
             self._stream_ended()
 
-        print("Setting force stop")
         self.force_stop = True
         self.has_started = False
 
@@ -526,7 +517,6 @@ class Stream:
         """
         bsize: int = 8192
         temp = open(song.get_filename(), "rb")
-        print("Sending song", song.get_song_name())
         self.shout.set_metadata({"song": song.get_song_name()})
 
         while True:
