@@ -68,6 +68,28 @@ class Stream:
     def __exit__(self, type, value, tb):
         pass
 
+
+    def set_jingle_percent_chance(self, percent: int) -> None:
+        """
+        Sets the percentage chance of playing a jingle.
+
+        Parameters:
+        percent (int): The percentage chance that the jingle will play, represented as an integer between 0 and 100.
+
+        Returns:
+        None
+        """
+        self.jingle_chance = percent
+
+    def set_advertisement_percent_chance(self, percent: int) -> None:
+        """
+        Sets the advertisement chance as a percentage.
+
+        :param percent: The percentage chance of showing an advertisement.
+        :type percent: int
+        """
+        self.advertisement_chance = percent
+
     def set_announce_songs(self, should_announce: bool) -> None:
         """
         Set the value for the announce_songs property.
