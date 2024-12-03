@@ -28,7 +28,7 @@ sudo apt-get install python3-dev python3-pip libshout3-dev
 Then continue to install the required libraries for python. 
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements3.9.txt
 ```
 
 ## Getting Started
